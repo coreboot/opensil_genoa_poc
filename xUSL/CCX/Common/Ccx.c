@@ -603,6 +603,7 @@ RegSettingBeforeLaunchingNextThread (
  * @param ApLaunchGlobalData AP launch global data
  *
  */
+NASM_ABI
 void
 ApEntryPointInC (
   volatile AMD_CCX_AP_LAUNCH_GLOBAL_DATA *ApLaunchGlobalData

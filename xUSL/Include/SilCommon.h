@@ -241,3 +241,9 @@ SilGetCommon2RevXferTable (
   SIL_DATA_BLOCK_ID   IpId,
   void                **XferTable
   );
+
+#if __GNUC__ && defined(__x86_64__)
+#define NASM_ABI __attribute__((ms_abi))
+#else
+#define NASM_ABI
+#endif

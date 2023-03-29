@@ -8,6 +8,7 @@
 // SPDX-License-Identifier: MIT
 
 #pragma once
+#include "SilCommon.h"
 #include <SMU/SmuIp2Ip.h>
 #pragma pack (push, 1)
 
@@ -153,7 +154,7 @@ void CcxSetMca (void);
 void CcxInitializeC6 (CCXCLASS_INPUT_BLK *CcxInputBlock);
 void ApAsmCode (void);
 void RegSettingBeforeLaunchingNextThread (void);
-void ApEntryPointInC (
+NASM_ABI void ApEntryPointInC (
   volatile AMD_CCX_AP_LAUNCH_GLOBAL_DATA *ApLaunchGlobalData);
 void CcxSetMiscMsrs (
   CCXCLASS_INPUT_BLK *CcxInputBlock
