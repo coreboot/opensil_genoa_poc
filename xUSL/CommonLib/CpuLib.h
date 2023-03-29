@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "SilCommon.h"
 #include <stdint.h>
 
 /// Native Die CPUID PCI Register
@@ -184,20 +185,20 @@ typedef enum {
 #define REMOTE_DELIVERY_PENDING                0x00010000ul
 #define REMOTE_DELIVERY_DONE                   0x00020000ul
 
-void xUslCpuSleep (void);
-uint8_t xUslGetThreadsPerCore (void);
-uint32_t xUslGetPackageType (void);
-uint32_t xUslGetInitialApicId (void);
-void xUslWrMsr (uint32_t MsrAddress, uint64_t MsrValue);
-uint64_t xUslRdMsr (uint32_t MsrAddress);
-uint8_t xUslGetPhysAddrSize (void);
-uint8_t xUslGetPhysAddrReduction (void);
-uint32_t xUslGetRawIdOnExecutingCore (void);
+NASM_ABI void xUslCpuSleep (void);
+NASM_ABI uint8_t xUslGetThreadsPerCore (void);
+NASM_ABI uint32_t xUslGetPackageType (void);
+NASM_ABI uint32_t xUslGetInitialApicId (void);
+NASM_ABI void xUslWrMsr (uint32_t MsrAddress, uint64_t MsrValue);
+NASM_ABI uint64_t xUslRdMsr (uint32_t MsrAddress);
+NASM_ABI uint8_t xUslGetPhysAddrSize (void);
+NASM_ABI uint8_t xUslGetPhysAddrReduction (void);
+NASM_ABI uint32_t xUslGetRawIdOnExecutingCore (void);
 void xUslMsrAnd (uint32_t Index, uint64_t AndData);
-uint32_t xUslIsSmtDisabled(void);
-uint32_t xUslGetProcessorId(void);
+NASM_ABI uint32_t xUslIsSmtDisabled(void);
+NASM_ABI uint32_t xUslGetProcessorId(void);
 void xUslMsrOr (uint32_t Index, uint64_t OrData);
 void xUslMsrAndThenOr (uint32_t Index, uint64_t AndData, uint64_t OrData);
-void xUslWbinvd(void);
-uint32_t xUslGetSecureEncryption(void);
-uint64_t xUslReadCr3(void);
+NASM_ABI void xUslWbinvd(void);
+NASM_ABI uint32_t xUslGetSecureEncryption(void);
+NASM_ABI uint64_t xUslReadCr3(void);
