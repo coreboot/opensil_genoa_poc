@@ -100,6 +100,12 @@ if CC_IS_GCC or CC_IS_CLANG
              '-Wno-pedantic', '-Wno-unknown-pragmas',
              '-Wno-unused-parameter',
              '-Wno-missing-field-initializers']
+
+  if OBJSZ == '64'
+  # Make sure we don't use sign extended 32bit symbols, we operate
+  # in a flat full memory environment.
+    cflags += '-mcmodel=large'
+  endif
   # Add some warnings
   cflags += ['-Wstrict-prototypes', '-Wmissing-prototypes']
 
