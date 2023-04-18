@@ -129,33 +129,27 @@ extern HOST_DEBUG_SERVICE mHostDebugService;
  * statement without {} encapsulating the code.
  *
  */
-#if SIL_DEBUG_ENABLE
 #define XSIM_TRACEPOINT(MsgLevel, Message, ...) \
   do { \
-    if (mHostDebugService != NULL) { \
+    if (SIL_DEBUG_ENABLE && mHostDebugService != NULL) { \
       ((HOST_DEBUG_SERVICE)mHostDebugService) (MsgLevel, "openSIL:xSIM:", \
       Message, __FUNCTION__, __LINE__, ##__VA_ARGS__); \
     } \
   } while (false)
 #define XUSL_TRACEPOINT(MsgLevel, Message, ...) \
   do { \
-    if (mHostDebugService != NULL) { \
+    if (SIL_DEBUG_ENABLE && mHostDebugService != NULL) {			\
       ((HOST_DEBUG_SERVICE)mHostDebugService) (MsgLevel, "openSIL:xUSL:", \
       Message, __FUNCTION__, __LINE__, ##__VA_ARGS__); \
     } \
   } while (false)
 #define XPRF_TRACEPOINT(MsgLevel, Message, ...) \
   do { \
-    if (mHostDebugService != NULL) { \
+    if (SIL_DEBUG_ENABLE && mHostDebugService != NULL) { \
       ((HOST_DEBUG_SERVICE)mHostDebugService) (MsgLevel, "openSIL:xPRF:", \
       Message, __FUNCTION__, __LINE__, ##__VA_ARGS__); \
     } \
   } while (false)
-#else
-#define XSIM_TRACEPOINT(MsgLevel, Message, ...)
-#define XUSL_TRACEPOINT(MsgLevel, Message, ...)
-#define XPRF_TRACEPOINT(MsgLevel, Message, ...)
-#endif
 
 /**
  * openSIL Common Data structures
