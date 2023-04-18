@@ -45,10 +45,11 @@
  *
  * +--------------------------------+ +-> ApStartupVector (got from Host Firmware directory)
  *
- *  C3 Value
- *  4 bytes (UINT32)                  //The BSP's C3 value is placed here so the APs can copy it.
+ *  Code for ApStartupCode            // The code AT ApStartupVector simply
+ *  AP_STARTUP_CODE_SIZE              // jumps here, where the ApStartupCode
+ *  0x80 should be enough             // byte code gets copied.
  *
- * +--------------------------------+ +-> ApStartupVector - 0x8
+ * +--------------------------------+ +-> ApStartupVector - AP_STARTUP_CODE_OFFSET
  *
  *  GDT                               //BSP GDTR at ApStartupVector + 4 points here.
  *  BSP_GDT_SIZE                      //Contains the BSP GDT entries.
@@ -62,11 +63,10 @@
  *
  * +--------------------------------+ +-> ApStartupVector - BSP_MSR_OFFSET
  *
- *  Code for ApStartupCode            // The code AT ApStartupVector simply
- *  AP_STARTUP_CODE_SIZE              // jumps here, where the ApStartupCode
- *  0x80 should be enough             // byte code gets copied.
+ *  C3 Value
+ *  4 bytes (UINT32)                  //The BSP's C3 value is placed here so the APs can copy it.
  *
- * +--------------------------------+ +-> ApStartupVector - AP_STARTUP_CODE_OFFSET
+ * +--------------------------------+ +-> ApStartupVector - 0x8
  */
 
 
@@ -76,8 +76,8 @@
 #define  AP_TEMP_BUFFER_SIZE    (BSP_GDT_SIZE + BSP_MSR_SIZE + AP_STARTUP_CODE_SIZE + 0x10) // 0x250
 
 #define  AP_STARTUP_CODE_OFFSET (BSP_GDT_SIZE + BSP_MSR_SIZE + AP_STARTUP_CODE_SIZE) // 0x240
-#define  BSP_MSR_OFFSET         (BSP_GDT_SIZE + BSP_MSR_SIZE) // 0x1C0
-#define  BSP_GDT_OFFSET         (BSP_GDT_SIZE) // 0x50
+#define  BSP_MSR_OFFSET         (AP_STARTUP_CODE_SIZE + BSP_GDT_SIZE + BSP_MSR_SIZE) // 0x1C0
+#define  BSP_GDT_OFFSET         (AP_STARTUP_CODE_SIZE + BSP_GDT_SIZE) // 0x50
 
 // If below size is changed, please update the same definition in ApAsm32.nasm and ApAsm64.nasm
 #define  AP_STACK_SIZE          0x200

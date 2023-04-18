@@ -18,7 +18,7 @@ endif
 incdir += include_directories( '.' )
 
 #List all NASM files to be generated in 32bit mode
-xusl_asm32 += files( 'ApAsm32.nasm' )
+xusl_asm32 += files([ 'ApAsm32.nasm', 'NearJump.nasm' ])
 
 #List all NASM files to be generated in 64bit mode
 xusl_asm64 += files( 'ApAsm64.nasm' )
