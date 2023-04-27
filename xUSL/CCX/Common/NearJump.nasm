@@ -13,16 +13,9 @@
 global ASM_TAG(Jump16Bit)
 global ASM_TAG(ResetVector)
 global ASM_TAG(eResetVector)
-extern ASM_TAG(gApLaunchGlobalData)
 extern ASM_TAG(ApAsmCode)
 
 SECTION .text
-
-bits 32
-
-Jump32Bit:
- mov	edi, [gApLaunchGlobalData]
- jmp	ApAsmCode
 
 align 16
 
@@ -46,7 +39,7 @@ ASM_TAG(Jump16Bit):
  mov	gs, ax
  mov	ss, ax
 
- o32 a32 jmp dword 0x10:ASM_TAG(Jump32Bit)
+ o32 a32 jmp dword 0x10:ASM_TAG(ApAsmCode)
 
 align 16
 

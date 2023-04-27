@@ -24,6 +24,7 @@ AP_STACK_SIZE                           EQU 200h
 
 extern ASM_TAG(RegSettingBeforeLaunchingNextThread)
 extern ASM_TAG(ApEntryPointInC)
+extern mApLaunchGlobalData
 
 global ASM_TAG(ApAsmCode) ; ApAsmCode Address is updated at offset 0x53 in ApStartupCode,
                           ; and ApStartupCode is copied temporarily into reset vector.
@@ -39,7 +40,7 @@ global ASM_TAG(ApAsmCode) ; ApAsmCode Address is updated at offset 0x53 in ApSta
 ;
 ;------------------------------------------------------------------------------
 ASM_TAG(ApAsmCode):
-  ; NOTE: EDI points to ApLaunchGlobalData
+  mov edi, mApLaunchGlobalData
   mov ax, 18h
   mov ds, ax
   mov es, ax
