@@ -37,8 +37,6 @@ uint8_t ApStack[AP_STACK_SIZE] = {0,};
  *
  */
 
-uint32_t gApLaunchGlobalData;
-
 void
 SetupApStartupRegion (
   volatile AMD_CCX_AP_LAUNCH_GLOBAL_DATA *ApLaunchGlobalData,
@@ -113,10 +111,6 @@ SetupApStartupRegion (
   const size_t ResetVectorSize = eResetVector - ResetVector;
   const size_t ApResetCodeSize = eResetVector - Jump16Bit;
   memcpy ((void*) ((uintptr_t)*ApStartupVector + ResetVectorSize - ApResetCodeSize), Jump16Bit, ApResetCodeSize);
-
-  // Fill in global data consumed by AP reset vector code
-  gApLaunchGlobalData = (uint32_t)ApLaunchGlobalData;
-
 
   // Copy GDT Entries to Segment + 0xFFF0 - BSP_GDT_OFFSET
   memcpy (
