@@ -33,13 +33,6 @@
  *  2 bytes (UINT16)                  //  then we launch the next.
  *
  * +--------------------------------+ +-> ApStartupVector + E
- *
- *  BSP GDTR
- *  10 bytes (UINT16 + UINT64)        // Data APs use to load their GDTs in the
- *  Depends if 32b or 64b             // ApStartupCode byte code.
- *
- * +--------------------------------+ +-> ApStartupVector + 4
- *
  *  Near Jump to ApStartupCode
  *  4 bytes                           //  The AP starts executing right here.
  *
@@ -50,13 +43,6 @@
  *  0x80 should be enough             // byte code gets copied.
  *
  * +--------------------------------+ +-> ApStartupVector - AP_STARTUP_CODE_OFFSET
- *
- *  GDT                               //BSP GDTR at ApStartupVector + 4 points here.
- *  BSP_GDT_SIZE                      //Contains the BSP GDT entries.
- *  0x48 should be enough             //9 x 8 byte entries.
- *
- * +--------------------------------+ +-> ApStartupVector - BSP_GDT_OFFSET
- *
  *  ApMtrrSyncList[]                  // The data here is used by the APs
  *  BSP_MSR_SIZE                      // to set their MSRs to be the same
  *  0x170 should be enough            //  as what the BSP has.
@@ -72,12 +58,10 @@
 
 #define  AP_STARTUP_CODE_SIZE   0x80
 #define  BSP_MSR_SIZE           0x170
-#define  BSP_GDT_SIZE           0x50
-#define  AP_TEMP_BUFFER_SIZE    (BSP_GDT_SIZE + BSP_MSR_SIZE + AP_STARTUP_CODE_SIZE + 0x10) // 0x250
+#define  AP_TEMP_BUFFER_SIZE    (BSP_MSR_SIZE + AP_STARTUP_CODE_SIZE + 0x10) // 0x250
 
-#define  AP_STARTUP_CODE_OFFSET (BSP_GDT_SIZE + BSP_MSR_SIZE + AP_STARTUP_CODE_SIZE) // 0x240
-#define  BSP_MSR_OFFSET         (AP_STARTUP_CODE_SIZE + BSP_GDT_SIZE + BSP_MSR_SIZE) // 0x1C0
-#define  BSP_GDT_OFFSET         (AP_STARTUP_CODE_SIZE + BSP_GDT_SIZE) // 0x50
+#define  AP_STARTUP_CODE_OFFSET (BSP_MSR_SIZE + AP_STARTUP_CODE_SIZE) // 0x240
+#define  BSP_MSR_OFFSET         (AP_STARTUP_CODE_SIZE + BSP_MSR_SIZE) // 0x1C0
 
 // If below size is changed, please update the same definition in ApAsm32.nasm and ApAsm64.nasm
 #define  AP_STACK_SIZE          0x200
@@ -125,8 +109,6 @@ typedef struct {
   uint32_t                   AllowToLaunchNextThreadLocation; ///< Do NOT change the offset of this variable
                                                               // as offset to this element is used in ApAsm nasm file.
   uint64_t                   ApStackBasePtr;                  ///< Do NOT change the offset of this variable
-                                                              // as offset to this element is used in ApAsm nasm file.
-  CCX_GDT_DESCRIPTOR         ApGdtDescriptor;                 ///< Do NOT change the offset of this variable
                                                               // as offset to this element is used in ApAsm nasm file.
   uint8_t                    SleepType;
   uint32_t                   SizeOfApMtrr;

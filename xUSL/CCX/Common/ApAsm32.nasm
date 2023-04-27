@@ -18,7 +18,6 @@ bits 32
 BspMsrLocationOffset                    EQU 0
 AllowToLaunchNextThreadLocationOffset   EQU 4
 ApStackBasePtrOffset                    EQU 8
-ApGdtDescriptorOffset                   EQU 10h
 
 AP_STACK_SIZE                           EQU 200h
 
@@ -103,18 +102,6 @@ Tom2Disabled:
   call ASM_TAG(ApEntryPointInC)
   pop edi
 
-  ; Set up resident GDT
-  mov esi, ApGdtDescriptorOffset
-  add esi, edi
-  lgdt [esi]
-  ; Use stack base as a long jump pointer buffer
-  mov esi, [edi + ApStackBasePtrOffset]
-  ; Update selector
-  mov WORD [esi + 4], 0010h
-  mov ebx, NewGdtAddress
-  mov [esi], ebx
-  jmp far [esi]
-NewGdtAddress:
   ; Increment call count to allow to launch next thread, after stack usage is done
   mov esi, [edi + AllowToLaunchNextThreadLocationOffset]
   lock inc WORD [esi]

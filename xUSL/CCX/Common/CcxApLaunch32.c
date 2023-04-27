@@ -16,7 +16,6 @@
 #include <CommonLib/CpuLib.h>
 
 // This needs to be global.
-uint8_t ApGdt[0x400];
 uint8_t ApStack[AP_STACK_SIZE] = {0,};
 
 /**
@@ -46,21 +45,8 @@ SetupApStartupRegion (
   )
 {
   uint8_t             i;
-  CCX_GDT_DESCRIPTOR  BspGdtr;
   uint32_t            EntrySize;
   uint64_t            EntryDest;
-  uint64_t GdtEntries[] =
-  {
-    0x0000000000000000,  // [00h] Null descriptor
-    0x00CF92000000FFFF,  // [08h] Linear data segment descriptor
-    0x00CF9A000000FFFF,  // [10h] Linear code segment descriptor
-    0x00CF92000000FFFF,  // [18h] System data segment descriptor
-    0x00CF9A000000FFFF,  // [20h] System code segment descriptor
-    0x0000000000000000,  // [28h] Spare segment descriptor
-    0x00CF93000000FFFF,  // [30h] System data segment descriptor
-    0x00AF9B000000FFFF,  // [38h] System code segment descriptor
-    0x0000000000000000   // [40h] Spare segment descriptor
-  };
 
   if ((ApLaunchGlobalData == NULL) ||
     (ApStartupVector == NULL) ||
@@ -112,13 +98,6 @@ SetupApStartupRegion (
   const size_t ApResetCodeSize = eResetVector - Jump16Bit;
   memcpy ((void*) ((uintptr_t)*ApStartupVector + ResetVectorSize - ApResetCodeSize), Jump16Bit, ApResetCodeSize);
 
-  // Copy GDT Entries to Segment + 0xFFF0 - BSP_GDT_OFFSET
-  memcpy (
-    (void*) ((uintptr_t)*ApStartupVector - BSP_GDT_OFFSET),
-    &GdtEntries,
-    sizeof (GdtEntries)
-    );
-
   // Load Fixed-MTRRs list with values from BSP.
   xUslMsrOr (MSR_SYS_CFG, BIT_64(19));
 
@@ -161,24 +140,9 @@ SetupApStartupRegion (
       (uint32_t)*ApStartupVector - BSP_MSR_OFFSET
       );
 
-  BspGdtr.Limit = (uint16_t) sizeof (GdtEntries) - 1;
-  BspGdtr.Base = (uint64_t) *ApStartupVector - BSP_GDT_OFFSET;
-
-  // Copy pointer to GDT entries to Segment + 0xFFF4
-  memcpy (
-    (void*) ((uint32_t)*ApStartupVector + 4),
-    &BspGdtr,
-    sizeof (BspGdtr)
-    );
-
   // Save BSP's patch level so that AP can use it to determine whether microcode patch
   // loading should be skipped
   ApLaunchGlobalData->BspPatchLevel = xUslRdMsr (MSR_PATCH_LEVEL);
-
-  memcpy (ApGdt, &GdtEntries[0], sizeof (GdtEntries));
-
-  ApLaunchGlobalData->ApGdtDescriptor.Limit = (sizeof (GdtEntries)) - 1;
-  ApLaunchGlobalData->ApGdtDescriptor.Base = (uint32_t) (size_t) ApGdt;
 
   // Force content into memory, out of cache, so that AP can have access.
   xUslWbinvd ();
