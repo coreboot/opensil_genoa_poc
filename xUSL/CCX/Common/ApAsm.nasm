@@ -137,6 +137,7 @@ Tom2Disabled:
   mov cr0, eax
 %endif
 
+  and esp, ~0xf
   ; Call into C code before next thread is launched
   call ASM_TAG(RegSettingBeforeLaunchingNextThread)
 
