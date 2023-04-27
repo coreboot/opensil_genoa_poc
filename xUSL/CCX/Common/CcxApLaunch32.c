@@ -111,33 +111,10 @@ SetupApStartupRegion (
 
   xUslMsrAnd (MSR_SYS_CFG, ~((uint64_t) SYS_CFG_MTRR_FIX_DRAM_MOD_EN));
 
-  // Copy MTRRs setting to Segment + 0xFFF0 - BSP_MSR_OFFSET
-  ApLaunchGlobalData->BspMsrLocation = (uint32_t) ((*ApStartupVector) - (BSP_MSR_OFFSET));
-  assert (ApLaunchGlobalData->SizeOfApMtrr <= BSP_MSR_SIZE);
-
-  // Need to cast ApLaunchGlobalData to avoid volatile quantifier warning (C4090)
-  memcpy (
-      (void*) ((uintptr_t)*ApStartupVector - BSP_MSR_OFFSET),
-      (void*) ApLaunchGlobalData->ApMtrrSyncList,
-      ApLaunchGlobalData->SizeOfApMtrr
-      );
-
   CCX_TRACEPOINT (
       SIL_TRACE_INFO,
       "ApLaunchGlobalData->AllowToLaunchNextThreadLocation = 0x%x\n",
       ApLaunchGlobalData->AllowToLaunchNextThreadLocation
-      );
-
-  CCX_TRACEPOINT (
-      SIL_TRACE_INFO,
-      "ApLaunchGlobalData->BspMsrLocation = 0x%x\n",
-      ApLaunchGlobalData->BspMsrLocation
-      );
-
-  CCX_TRACEPOINT (
-      SIL_TRACE_INFO,
-      "ApLaunchGlobalData->ApMtrrSyncList = 0x%x\n",
-      (uint32_t)*ApStartupVector - BSP_MSR_OFFSET
       );
 
   // Save BSP's patch level so that AP can use it to determine whether microcode patch

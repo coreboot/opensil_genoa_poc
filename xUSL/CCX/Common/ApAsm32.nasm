@@ -16,8 +16,8 @@ SECTION .text
 bits 32
 
 BspMsrLocationOffset                    EQU 0
-AllowToLaunchNextThreadLocationOffset   EQU 4
-ApStackBasePtrOffset                    EQU 8
+AllowToLaunchNextThreadLocationOffset   EQU 8
+ApStackBasePtrOffset                    EQU 16
 
 AP_STACK_SIZE                           EQU 200h
 

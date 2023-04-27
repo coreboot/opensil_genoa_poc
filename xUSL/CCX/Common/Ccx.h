@@ -43,11 +43,6 @@
  *  0x80 should be enough             // byte code gets copied.
  *
  * +--------------------------------+ +-> ApStartupVector - AP_STARTUP_CODE_OFFSET
- *  ApMtrrSyncList[]                  // The data here is used by the APs
- *  BSP_MSR_SIZE                      // to set their MSRs to be the same
- *  0x170 should be enough            //  as what the BSP has.
- *
- * +--------------------------------+ +-> ApStartupVector - BSP_MSR_OFFSET
  *
  *  C3 Value
  *  4 bytes (UINT32)                  //The BSP's C3 value is placed here so the APs can copy it.
@@ -57,11 +52,9 @@
 
 
 #define  AP_STARTUP_CODE_SIZE   0x80
-#define  BSP_MSR_SIZE           0x170
-#define  AP_TEMP_BUFFER_SIZE    (BSP_MSR_SIZE + AP_STARTUP_CODE_SIZE + 0x10) // 0x250
+#define  AP_TEMP_BUFFER_SIZE    (AP_STARTUP_CODE_SIZE + 0x10) // 0x250
 
-#define  AP_STARTUP_CODE_OFFSET (BSP_MSR_SIZE + AP_STARTUP_CODE_SIZE) // 0x240
-#define  BSP_MSR_OFFSET         (AP_STARTUP_CODE_SIZE + BSP_MSR_SIZE) // 0x1C0
+#define  AP_STARTUP_CODE_OFFSET (AP_STARTUP_CODE_SIZE) // 0x240
 
 // If below size is changed, please update the same definition in ApAsm32.nasm and ApAsm64.nasm
 #define  AP_STACK_SIZE          0x200
@@ -104,15 +97,16 @@ typedef struct {
 } CCX_GDT_DESCRIPTOR;
 
 typedef struct {
-  uint32_t                   BspMsrLocation;                  ///< Do NOT change the offset of this variable,
-                                                              // as offset to this element is used in ApAsm nasm file.
-  uint32_t                   AllowToLaunchNextThreadLocation; ///< Do NOT change the offset of this variable
+  union { // Make sure we have the same size and alignment on 32 and 64 bit
+    volatile AP_MTRR_SETTINGS  *ApMtrrSyncList;
+    uint64_t _raw;
+  };
+  uint64_t                   AllowToLaunchNextThreadLocation; ///< Do NOT change the offset of this variable
                                                               // as offset to this element is used in ApAsm nasm file.
   uint64_t                   ApStackBasePtr;                  ///< Do NOT change the offset of this variable
                                                               // as offset to this element is used in ApAsm nasm file.
   uint8_t                    SleepType;
   uint32_t                   SizeOfApMtrr;
-  volatile AP_MTRR_SETTINGS  *ApMtrrSyncList;
   volatile AP_MSR_SYNC       *ApMsrSyncList;
   uint64_t                   BspPatchLevel;
   uint64_t                   UcodePatchAddr;
