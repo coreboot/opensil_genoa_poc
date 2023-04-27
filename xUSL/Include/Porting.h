@@ -41,4 +41,14 @@
     %define ASM_TAG(name) name
   %endif
 
+  %ifidni __OUTPUT_FORMAT__, win32
+    %define IS64BIT 0
+  %elifidni __OUTPUT_FORMAT__, elf32
+    %define IS64BIT 0
+  %elifidni __OUTPUT_FORMAT__, win64
+    %define IS64BIT 1
+  %elifidni __OUTPUT_FORMAT__, elf64
+    %define IS64BIT 1
+  %endif
+
 %endif

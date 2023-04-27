@@ -5,20 +5,12 @@
 xusl += files([ 'AmdTable.c', 'Ccx.c', 'CcxBrandString.c',
                 'CcxC6.c', 'CcxCacheInit.c', 'CcxDownCoreInit.c',
                 'CcxMicrocodePatch.c', 'CcxMiscInit.c', 'CcxSetMca.c',
-                'SocServices.c' ])
-
-# For coverity build, force all files into the build
-if (BUILD_IS_32BIT or COVERITY_BUILD)
-    xusl += files([ 'CcxApLaunch32.c' ])
-endif
-if ((not BUILD_IS_32BIT) or COVERITY_BUILD)
-    xusl += files([ 'CcxApLaunch64.c' ])
-endif
+                'SocServices.c', 'CcxApLaunch.c' ])
 
 incdir += include_directories( '.' )
 
 #List all NASM files to be generated in 32bit mode
-xusl_asm32 += files([ 'ApAsm32.nasm', 'NearJump.nasm' ])
+xusl_asm32 += files([ 'ApAsm.nasm', 'NearJump.nasm' ])
 
 #List all NASM files to be generated in 64bit mode
-xusl_asm64 += files( 'ApAsm64.nasm' )
+xusl_asm64 += files([ 'ApAsm.nasm', 'NearJump.nasm' ])

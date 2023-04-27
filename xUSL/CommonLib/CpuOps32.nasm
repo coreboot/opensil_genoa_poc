@@ -20,6 +20,7 @@ global ASM_TAG(xUslRdMsr)
 global ASM_TAG(xUslWrMsr)
 global ASM_TAG(xUslWbinvd)
 global ASM_TAG(xUslGetSecureEncryption)
+global ASM_TAG(xUslReadCr3)
 
     SECTION .text
     bits 32
@@ -282,4 +283,8 @@ ASM_TAG(xUslGetSecureEncryption):
     mov     eax, 0x8000001F
     cpuid
     pop     ebx
+
+
+ASM_TAG(xUslReadCr3):
+    mov     eax, cr3
     ret

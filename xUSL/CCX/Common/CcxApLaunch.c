@@ -1,6 +1,6 @@
 /**
- * @file  CcxApLaunch32.c
- * @brief 32 bit AP launch code.
+ * @file  CcxApLaunch.c
+ * @brief AP launch code.
  *
  */
 
@@ -17,6 +17,7 @@
 
 // This needs to be global.
 uint8_t ApStack[AP_STACK_SIZE] = {0,};
+uint64_t gBspCr3Value;
 
 /**
  * SetupApStartupRegion
@@ -120,6 +121,9 @@ SetupApStartupRegion (
   // Save BSP's patch level so that AP can use it to determine whether microcode patch
   // loading should be skipped
   ApLaunchGlobalData->BspPatchLevel = xUslRdMsr (MSR_PATCH_LEVEL);
+
+  // Save CR0 value for AP to use to set up paging
+  gBspCr3Value = xUslReadCr3();
 
   // Force content into memory, out of cache, so that AP can have access.
   xUslWbinvd ();
