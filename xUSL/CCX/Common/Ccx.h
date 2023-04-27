@@ -43,11 +43,6 @@
  *  0x80 should be enough             // byte code gets copied.
  *
  * +--------------------------------+ +-> ApStartupVector - AP_STARTUP_CODE_OFFSET
- *
- *  C3 Value
- *  4 bytes (UINT32)                  //The BSP's C3 value is placed here so the APs can copy it.
- *
- * +--------------------------------+ +-> ApStartupVector - 0x8
  */
 
 
