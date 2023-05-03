@@ -84,7 +84,6 @@ SetupApStartupRegion (
     AP_TEMP_BUFFER_SIZE
     );
 
-  ApLaunchGlobalData->AllowToLaunchNextThreadLocation = (uint32_t) (*ApStartupVector + 0xE);
 
   // Copy the near jump to AP startup code to reset vector. The near jump
   // forces execution to start from CS:FFF0 - AP_STARTUP_CODE_OFFSET
@@ -107,12 +106,6 @@ SetupApStartupRegion (
   UpdateApMtrrSettings (ApLaunchGlobalData->ApMtrrSyncList, &(CcxDataBlock->CcxInputBlock));
 
   xUslMsrAnd (MSR_SYS_CFG, ~((uint64_t) SYS_CFG_MTRR_FIX_DRAM_MOD_EN));
-
-  CCX_TRACEPOINT (
-      SIL_TRACE_INFO,
-      "ApLaunchGlobalData->AllowToLaunchNextThreadLocation = 0x%x\n",
-      ApLaunchGlobalData->AllowToLaunchNextThreadLocation
-      );
 
   // Save BSP's patch level so that AP can use it to determine whether microcode patch
   // loading should be skipped

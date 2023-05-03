@@ -93,8 +93,6 @@ typedef struct {
     volatile AP_MTRR_SETTINGS  *ApMtrrSyncList;
     uint64_t _raw;
   };
-  uint64_t                   AllowToLaunchNextThreadLocation; ///< Do NOT change the offset of this variable
-                                                              // as offset to this element is used in ApAsm nasm file.
   uint8_t                    SleepType;
   uint32_t                   SizeOfApMtrr;
   volatile AP_MSR_SYNC       *ApMsrSyncList;

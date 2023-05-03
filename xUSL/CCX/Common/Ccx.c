@@ -34,6 +34,8 @@
 #define SIZE_16KB                     0x00004000
 #define SIZE_16MB                     0x01000000
 
+volatile uint32_t gApSyncFlag = 0;
+
 static void UpdateCcxOutputData(CCXCLASS_DATA_BLK *CcxData);
 
 /// Default values for Ccx configuration
@@ -205,20 +207,13 @@ static
 void
 RestoreResetVector (
   volatile AMD_CCX_AP_LAUNCH_GLOBAL_DATA *ApLaunchGlobalData,
-  uint16_t TotalApCoresLaunched,
   uint64_t *ApStartupVector,
   uint8_t  *MemoryContentCopy
   )
 {
-  uint16_t ApSyncCoreNumber;
-  ApSyncCoreNumber = 0xFFFF;
   if((ApLaunchGlobalData == NULL) || (ApStartupVector == NULL) || (MemoryContentCopy == NULL)) {
     return;
   }
-  // Check whether the last core has completed running the AP Startup code
-  do {
-    ApSyncCoreNumber = (*(uint16_t *)(size_t)(ApLaunchGlobalData->AllowToLaunchNextThreadLocation));
-  } while (ApSyncCoreNumber != TotalApCoresLaunched);
 
   memcpy ((void *) ((uintptr_t)((*ApStartupVector) - (AP_STARTUP_CODE_OFFSET))),
     MemoryContentCopy,
@@ -263,7 +258,6 @@ InitializeCcxAndLaunchAps (
   uint32_t          NumberOfThreads;
   uint8_t           ApicMode;
   uint32_t          ApNumBfLaunch = 0x0;
-  volatile uint16_t *ApSyncFlag = NULL;
   uint8_t           i = 0;
   SMU_IP2IP_API     *SmuApi;
   DF_IP2IP_API      *DfApi;
@@ -423,8 +417,6 @@ InitializeCcxAndLaunchAps (
         mMemoryContentCopy,
         CcxConfigData);
 
-    ApSyncFlag = (volatile uint16_t *)(uintptr_t) mApLaunchGlobalData.AllowToLaunchNextThreadLocation;
-
     CCX_TRACEPOINT (SIL_TRACE_INFO, "Launching APs\n");
 
     for (Socket = 0; Socket < NumberOfSockets; Socket++) {
@@ -460,10 +452,8 @@ InitializeCcxAndLaunchAps (
                     Thread
                     );
                   // Wait until the core launch
-                  if (ApSyncFlag != NULL) {
-                    while (*ApSyncFlag != ApNumBfLaunch);
-                    CCX_TRACEPOINT (SIL_TRACE_INFO, "going to launch next AP.\n");
-                  }
+                  while (gApSyncFlag != ApNumBfLaunch);
+                  CCX_TRACEPOINT (SIL_TRACE_INFO, "going to launch next AP.\n");
                 }
               }
             }
@@ -478,7 +468,6 @@ InitializeCcxAndLaunchAps (
     // Restore the data located at the reset vector
     if (mApLaunchGlobalData.SleepType != 3) {
       RestoreResetVector (&mApLaunchGlobalData,
-        (uint16_t) ApNumBfLaunch,
         &mApStartupVector,
         mMemoryContentCopy);
     }
