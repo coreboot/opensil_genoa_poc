@@ -605,10 +605,10 @@ RegSettingBeforeLaunchingNextThread (
  */
 NASM_ABI
 void
-ApEntryPointInC (
-  volatile AMD_CCX_AP_LAUNCH_GLOBAL_DATA *ApLaunchGlobalData
-  )
+ApEntryPointInC ( void )
 {
+  volatile AMD_CCX_AP_LAUNCH_GLOBAL_DATA *ApLaunchGlobalData = &mApLaunchGlobalData;
+
   // Skip loading microcode patch on AP if BSP's patch level is 0.
   if (ApLaunchGlobalData->BspPatchLevel != 0) {
     // Using the address saved by BSP previously

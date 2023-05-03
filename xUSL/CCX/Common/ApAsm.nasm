@@ -132,11 +132,6 @@ Tom2Disabled:
   call ASM_TAG(RegSettingBeforeLaunchingNextThread)
 
   ; Call into C code
-%if IS64BIT == 1
-  mov rcx, rdi
-%else
-  push edi
-%endif
  call ASM_TAG(ApEntryPointInC)
 
 ApDone:
