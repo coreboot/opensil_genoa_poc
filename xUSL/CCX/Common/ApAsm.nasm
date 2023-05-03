@@ -14,7 +14,7 @@
 BspMsrLocationOffset                    EQU 0
 AllowToLaunchNextThreadLocationOffset   EQU 8
 
-AP_STACK_SIZE                           EQU 200h
+AP_STACK_SIZE                           EQU 600h
 
 extern ASM_TAG(RegSettingBeforeLaunchingNextThread)
 extern ASM_TAG(ApEntryPointInC)
