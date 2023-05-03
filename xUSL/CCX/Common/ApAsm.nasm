@@ -12,14 +12,13 @@
 %include "Porting.h"
 
 BspMsrLocationOffset                    EQU 0
-AllowToLaunchNextThreadLocationOffset   EQU 8
-
 AP_STACK_SIZE                           EQU 600h
 
 extern ASM_TAG(RegSettingBeforeLaunchingNextThread)
 extern ASM_TAG(ApEntryPointInC)
 extern ASM_TAG(mApLaunchGlobalData)
 extern ASM_TAG(gBspCr3Value)
+extern ASM_TAG(gApSyncFlag)
 
 SECTION .bss
 align 16
@@ -136,8 +135,8 @@ Tom2Disabled:
 
 ApDone:
   ; Increment call count to allow to launch next thread, after stack usage is done
-  mov esi, [edi + AllowToLaunchNextThreadLocationOffset]
-  lock inc WORD [esi]
+  mov eax, ASM_TAG(gApSyncFlag)
+  lock inc DWORD [eax]
 
   ; Hlt
 Hlt_loop:
