@@ -11,11 +11,8 @@
 
 %include "Porting.h"
 
-SECTION .text
-
 BspMsrLocationOffset                    EQU 0
 AllowToLaunchNextThreadLocationOffset   EQU 8
-ApStackBasePtrOffset                    EQU 16
 
 AP_STACK_SIZE                           EQU 200h
 
@@ -24,6 +21,13 @@ extern ASM_TAG(ApEntryPointInC)
 extern ASM_TAG(mApLaunchGlobalData)
 extern ASM_TAG(gBspCr3Value)
 
+SECTION .bss
+align 16
+_ApStack:
+resb AP_STACK_SIZE
+_eApStack:
+
+SECTION .text
 global ASM_TAG(ApAsmCode) ; ApAsmCode Address is updated at offset 0x53 in ApStartupCode,
                           ; and ApStartupCode is copied temporarily into reset vector.
 
@@ -69,25 +73,11 @@ FarJump64:
   mov es, ax
   mov ss, ax
 
-  ; Reset RSP
-  ; Use only 1 AP stack, later increment of AllowToLaunchNextThreadLocationOffset
-  ; needs to be done after finishing stack usage of current AP thread
-  xor rax, rax
-  mov eax, AP_STACK_SIZE
-
-  mov rsi, [edi + ApStackBasePtrOffset]
-  add rax, rsi
-  mov rsp, rax
+  mov rsp, _eApStack
 
 %else
-  ; Reset ESP
-  ; Use only 1 AP stack, later increment of AllowToLaunchNextThreadLocationOffset
-  ; needs to be done after finishing stack usage of current AP thread
-  mov eax, AP_STACK_SIZE
 
-  mov esi, [edi + ApStackBasePtrOffset]
-  add eax, esi
-  mov esp, eax
+  mov esp, _eApStack
 
 %endif
 
@@ -147,8 +137,9 @@ Tom2Disabled:
 %else
   push edi
 %endif
-  call ASM_TAG(ApEntryPointInC)
+ call ASM_TAG(ApEntryPointInC)
 
+ApDone:
   ; Increment call count to allow to launch next thread, after stack usage is done
   mov esi, [edi + AllowToLaunchNextThreadLocationOffset]
   lock inc WORD [esi]

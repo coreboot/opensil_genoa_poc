@@ -51,9 +51,6 @@
 
 #define  AP_STARTUP_CODE_OFFSET (AP_STARTUP_CODE_SIZE) // 0x240
 
-// If below size is changed, please update the same definition in ApAsm32.nasm and ApAsm64.nasm
-#define  AP_STACK_SIZE          0x200
-
 #define CPU_LIST_TERMINAL       0xFFFFFFFFul
 
 #define CCX_TRACEPOINT(MsgLevel, Message, ...)        \
@@ -97,8 +94,6 @@ typedef struct {
     uint64_t _raw;
   };
   uint64_t                   AllowToLaunchNextThreadLocation; ///< Do NOT change the offset of this variable
-                                                              // as offset to this element is used in ApAsm nasm file.
-  uint64_t                   ApStackBasePtr;                  ///< Do NOT change the offset of this variable
                                                               // as offset to this element is used in ApAsm nasm file.
   uint8_t                    SleepType;
   uint32_t                   SizeOfApMtrr;

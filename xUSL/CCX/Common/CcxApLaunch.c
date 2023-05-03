@@ -16,7 +16,6 @@
 #include <CommonLib/CpuLib.h>
 
 // This needs to be global.
-uint8_t ApStack[AP_STACK_SIZE] = {0,};
 uint64_t gBspCr3Value;
 
 /**
@@ -64,9 +63,6 @@ SetupApStartupRegion (
   *ApStartupVector = (uint64_t) ((uint32_t) EntryDest + EntrySize - 0x10);
 
   CCX_TRACEPOINT (SIL_TRACE_INFO, "ApStartupVector = 0x%x\n", *ApStartupVector);
-
-  // Use host allocated space for APs to use as stack space
-  ApLaunchGlobalData->ApStackBasePtr = (uintptr_t) ApStack;
 
   // MemoryContentCopy is used to store data at reset vector
   memset (
