@@ -89,10 +89,7 @@ typedef struct {
 } CCX_GDT_DESCRIPTOR;
 
 typedef struct {
-  union { // Make sure we have the same size and alignment on 32 and 64 bit
-    volatile AP_MTRR_SETTINGS  *ApMtrrSyncList;
-    uint64_t _raw;
-  };
+  volatile AP_MTRR_SETTINGS  *ApMtrrSyncList;
   uint8_t                    SleepType;
   uint32_t                   SizeOfApMtrr;
   volatile AP_MSR_SYNC       *ApMsrSyncList;
