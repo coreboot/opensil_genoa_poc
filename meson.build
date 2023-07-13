@@ -183,8 +183,8 @@ subdir('xPRF')
 # Send a list of included source files to a log file
 #----------------------------------------------------------
 #
-print_list =  find_program('util' / 'ListFiles.py')
-run_command( print_list, PLATFORM_KCFG_FILE, [xusl, xprf, xsim] )
+#print_list =  find_program('util' / 'ListFiles.py')
+#run_command( print_list, PLATFORM_KCFG_FILE, [xusl, xprf, xsim] )
 
 
 #----------------------------------------------------------
