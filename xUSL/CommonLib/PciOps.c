@@ -220,7 +220,7 @@ xUSLPciRead (uint32_t Address, ACCESS_WIDTH  Width, void *Value)
  */
 void xUSLPciRMW(uint32_t Address, ACCESS_WIDTH Width, uint32_t Mask, uint32_t Value)
 {
-  uint32_t Data;
+  uint32_t Data = 0;
   xUSLPciRead (Address, Width, &Data);
   Data = (Data & Mask) | Value;
   xUSLPciWrite (Address, Width, &Data);

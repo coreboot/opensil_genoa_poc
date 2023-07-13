@@ -302,7 +302,7 @@ ApobGetPhysCcdNumber (
 {
   SIL_STATUS Status;
 
-  APOB_CCD_LOGICAL_TO_PHYSICAL_MAP_TYPE_STRUCT *ApobEntry;
+  APOB_CCD_LOGICAL_TO_PHYSICAL_MAP_TYPE_STRUCT *ApobEntry = NULL;
 
   Status = AmdGetApobEntryInstance (APOB_CCX,
       APOB_CCD_LOGICAL_TO_PHYSICAL_MAP_TYPE,
@@ -337,7 +337,7 @@ ApobGetPhysComplexNumber (
 {
   SIL_STATUS Status;
 
-  APOB_CCD_LOGICAL_TO_PHYSICAL_MAP_TYPE_STRUCT *ApobEntry;
+  APOB_CCD_LOGICAL_TO_PHYSICAL_MAP_TYPE_STRUCT *ApobEntry = NULL;
 
   Status = AmdGetApobEntryInstance (APOB_CCX,
     APOB_CCD_LOGICAL_TO_PHYSICAL_MAP_TYPE,
@@ -374,7 +374,7 @@ ApobGetPhysCoreNumber (
 )
 {
   SIL_STATUS Status;
-  APOB_CCD_LOGICAL_TO_PHYSICAL_MAP_TYPE_STRUCT *ApobEntry;
+  APOB_CCD_LOGICAL_TO_PHYSICAL_MAP_TYPE_STRUCT *ApobEntry = NULL;
 
   Status = AmdGetApobEntryInstance (APOB_CCX,
     APOB_CCD_LOGICAL_TO_PHYSICAL_MAP_TYPE,
@@ -414,7 +414,7 @@ ApobGetIsThreadEnabled (
   )
 {
   SIL_STATUS Status;
-  APOB_CCD_LOGICAL_TO_PHYSICAL_MAP_TYPE_STRUCT *ApobEntry;
+  APOB_CCD_LOGICAL_TO_PHYSICAL_MAP_TYPE_STRUCT *ApobEntry = NULL;
 
   Status = AmdGetApobEntryInstance (APOB_CCX,
     APOB_CCD_LOGICAL_TO_PHYSICAL_MAP_TYPE,
@@ -451,7 +451,7 @@ ApobGetCcdLogToPhysMap (
   )
 {
   uint32_t          ApobInstanceId;
-  APOB_TYPE_HEADER  *ApobEntry;
+  APOB_TYPE_HEADER  *ApobEntry = NULL;
   SIL_STATUS        Status;
 
   APOB_TRACEPOINT (SIL_TRACE_ENTRY, "\n");
@@ -568,7 +568,7 @@ SIL_STATUS
 ApobGetSubProgram (uint32_t *SubProgram)
 {
   SIL_STATUS Status;
-  APOB_GEN_INFO_TYPE_STRUCT *ApobEntry;
+  APOB_GEN_INFO_TYPE_STRUCT *ApobEntry = NULL;
   Status = AmdGetApobEntryInstance (APOB_GEN,
     APOB_GEN_CONFIGURATION_INFO_TYPE,
     0,
@@ -642,7 +642,7 @@ ApobGetDimmSpdData (
   uint32_t          TypeSize;
   SIL_STATUS        Status;
   APOB_TYPE_HEADER  *ApobTypeHeader;
-  APOB_MEM_DIMM_D5_SPD_DATA_STRUCT *ApobEntry;
+  APOB_MEM_DIMM_D5_SPD_DATA_STRUCT *ApobEntry = NULL;
 
   Status = AmdGetApobEntryInstance (APOB_MEM,
                                     APOB_MEM_DIMM_SPD_DATA_TYPE,
