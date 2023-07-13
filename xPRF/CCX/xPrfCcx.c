@@ -158,7 +158,7 @@ xPrfCreateSratApicEntry (
   uint32_t  *SratTableLength
   )
 {
-  uint32_t              ApicId;
+  uint32_t              ApicId = 0;
   uint32_t              SocketLoop;
   uint32_t              DieLoop;
   uint32_t              CcdLoop;
