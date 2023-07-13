@@ -131,10 +131,10 @@ else   # presume MSVC
 endif
 
 if CC_IS_GCC
-  cflags += '-Wold-style-declaration'
+  cflags += ['-Wold-style-declaration', '-Wno-builtin-declaration-mismatch' ]
 endif
 if CC_IS_CLANG
-  cflags += '-Wno-self-assign'
+  cflags += ['-Wno-self-assign', '-Wno-incompatible-library-redeclaration' ]
 endif
 
 add_global_arguments(cflags, language : 'c')
