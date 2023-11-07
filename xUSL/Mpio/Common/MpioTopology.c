@@ -102,14 +102,12 @@ MpioUserConfigDump (
    * Some of the variables used can not be currently initialized
    */
   MPIO_PORT_DESCRIPTOR      *EngineDescriptor;
-  size_t                     Index;
   MPIO_COMPLEX_DESCRIPTOR   *LocalDescriptor;
 
 
 
 
   LocalDescriptor = ComplexDescriptor;
-  Index = 0;
   while (LocalDescriptor != NULL) {
 
     EngineDescriptor = LocalDescriptor->PciePortList;
@@ -118,7 +116,6 @@ MpioUserConfigDump (
       EngineDescriptor = PcieConfigGetNextDataDescriptor (EngineDescriptor);
     }
     LocalDescriptor = PcieConfigGetNextDataDescriptor (LocalDescriptor);
-    Index++;
   }
 
 

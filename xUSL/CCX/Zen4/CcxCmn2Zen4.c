@@ -150,7 +150,8 @@ Zen4CalcLocalApic (
      (SIL_RESERVED_823 - SIL_RESERVED_822) * Index + SIL_RESERVED_822, FABRIC_REG_ACC_BC);
   }
   for (CoreIdx = 0; (CoreIdx < ZEN4_MAX_CORES_PER_SKT) && ((CoreEnable[CoreIdx / 32]
-                                       & (0x1 << (CoreIdx % 32))) == 0); CoreIdx++);
+                                       & (0x1 << (CoreIdx % 32))) == 0); CoreIdx++)
+                                       ;
   assert(CoreIdx < ZEN4_MAX_CORES_PER_SKT);
 
   MaxCcxPerCcd   = MAX_CCX_PER_CCD;

@@ -74,13 +74,11 @@ CcxSetMiscMsrs (
   LocalEnableSvmAVIC        = CcxInputBlock->EnableSvmAVIC;
   LocalIbsHardwareEn        = CcxInputBlock->IbsHardwareEn;
 
-  // Workaround to enable GCC build
-  unsigned long tempWa = 0x0;
-  tempWa += (unsigned long) LocalAmdReserved;
-  tempWa += (unsigned long) LocalAmdReserved1;
-  tempWa += (unsigned long) LocalAmdReserved2;
-  tempWa += (unsigned long) LocalEnableSvmAVIC;
-  tempWa += (unsigned long) LocalIbsHardwareEn;
+  // Workaround to enable GCC & clang builds
+  (void)LocalAmdReserved;
+  (void)LocalAmdReserved1;
+  (void)LocalAmdReserved2;
+  (void)LocalIbsHardwareEn;
   // end workaround
    // Force recalc of TSC on all threads after loading patch
   LocalMsrRegister = xUslRdMsr (MSR_PSTATE_DEF_ADDRESS);
